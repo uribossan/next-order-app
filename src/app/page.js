@@ -72,7 +72,7 @@ export default function Home() {
 
   const addNewItem = async (e) => {
     e.preventDefault();
-    await fetch('/api/items', {
+    const res = await fetch('/api/items', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -85,6 +85,13 @@ export default function Home() {
         currentStock: parseInt(addMin)
       })
     });
+    
+    if (!res.ok) {
+      const errorData = await res.json();
+      alert('エラーが発生しました: ' + (errorData.error || '通信エラー'));
+      return;
+    }
+    
     alert('追加しました！');
     fetchData();
     setAddName(''); setAddCourse(''); setAddSupplier('');
